@@ -1,72 +1,72 @@
 /* eslint-disable camelcase */
 
 exports.up = (pgm) => {
-  pgm.createTable("albums", {
+  pgm.createTable('albums', {
     id: {
-      type: "VARCHAR(50)",
+      type: 'VARCHAR(50)',
       primaryKey: true,
     },
     name: {
-      type: "TEXT",
+      type: 'TEXT',
       notNull: true,
     },
     year: {
-      type: "INTEGER",
+      type: 'INTEGER',
       notNull: true,
     },
-    createdAt: {
-      type: "TIMESTAMP",
+    created_at: {
+      type: 'TIMESTAMP',
       notNull: true,
-      default: pgm.func("current_timestamp"),
+      default: pgm.func('current_timestamp'),
     },
-    updatedAt: {
-      type: "TIMESTAMP",
+    updated_at: {
+      type: 'TIMESTAMP',
       notNull: true,
-      default: pgm.func("current_timestamp"),
+      default: pgm.func('current_timestamp'),
     },
   });
 
-  pgm.createTable("songs", {
+  pgm.createTable('songs', {
     id: {
-      type: "VARCHAR(50)",
+      type: 'VARCHAR(50)',
       primaryKey: true,
     },
     title: {
-      type: "TEXT",
+      type: 'TEXT',
       notNull: true,
     },
     year: {
-      type: "INTEGER",
+      type: 'INTEGER',
       notNull: true,
     },
     performer: {
-      type: "TEXT",
+      type: 'TEXT',
       notNull: true,
     },
     genre: {
-      type: "TEXT",
+      type: 'TEXT',
       notNull: true,
     },
     duration: {
-      type: "INTEGER",
+      type: 'INTEGER',
     },
-    albumId: {
-      type: "VARCHAR(50)",
+    album_id: {
+      type: 'VARCHAR(50)',
     },
-    createdAt: {
-      type: "TIMESTAMP",
+    created_at: {
+      type: 'TIMESTAMP',
       notNull: true,
-      default: pgm.func("current_timestamp"),
+      default: pgm.func('current_timestamp'),
     },
-    updatedAt: {
-      type: "TIMESTAMP",
+    updated_at: {
+      type: 'TIMESTAMP',
       notNull: true,
-      default: pgm.func("current_timestamp"),
+      default: pgm.func('current_timestamp'),
     },
   });
 };
 
 exports.down = (pgm) => {
-  pgm.dropTable("songs");
-  pgm.dropTable("albums");
+  pgm.dropTable('songs');
+  pgm.dropTable('albums');
 };
