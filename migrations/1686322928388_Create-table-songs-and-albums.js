@@ -49,13 +49,9 @@ exports.up = (pgm) => {
     },
     duration: {
       type: "INTEGER",
-      notNull: true,
     },
     albumId: {
       type: "VARCHAR(50)",
-      references: "albums",
-      notNull: true,
-      onDelete: "RESTRICT",
     },
     createdAt: {
       type: "TIMESTAMP",
