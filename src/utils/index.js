@@ -1,21 +1,27 @@
-const mapDBToModel = ({ id, name, year }) => ({
-  id,
-  name,
-  year,
-});
-
 const mapDBSongToModel = ({ id, title, performer }) => ({
   id,
   title,
   performer,
 });
 
-const transformedData = {};
-const mapAlbumWithSongs = ({ album_id, album_name, album_year, ...songs }) => ({
-  id: album_id,
-  name: album_name,
-  year: album_year,
-  songs: [songs],
-});
+const mapAlbumWithSongs = (albumSongs) => {
+  const result = {
+    id: albumSongs[0].album_id,
+    name: albumSongs[0].album_name,
+    year: albumSongs[0].album_year,
+    songs:
+      albumSongs[0].id === null
+        ? []
+        : albumSongs.map((song) => ({
+            id: song.id,
+            title: song.title,
+            performer: song.performer,
+          })),
+  };
+  return result;
+};
 
-module.exports = { mapDBToModel, mapDBSongToModel, mapAlbumWithSongs };
+module.exports = {
+  mapDBSongToModel,
+  mapAlbumWithSongs,
+};
