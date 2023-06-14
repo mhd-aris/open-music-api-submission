@@ -2,7 +2,6 @@ const { nanoid } = require('nanoid');
 const { Pool } = require('pg');
 const InvariantError = require('../exceptions/InvariantError');
 const NotFoundError = require('../exceptions/NotFoundError');
-const { mapDBSongToModel } = require('../utils');
 
 class SongsServices {
   constructor() {
@@ -11,7 +10,6 @@ class SongsServices {
 
   async addSong({ title, year, performer, genre, duration, albumId }) {
     const id = `song-${nanoid(16)}`;
-
     const query = {
       text: 'INSERT INTO songs VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING id',
       values: [id, title, year, performer, genre, duration, albumId],
@@ -24,9 +22,10 @@ class SongsServices {
 
     return result.rows[0].id;
   }
+
   async getSongs(title, performer) {
+    let query = 'SELECT id, title, performer FROM songs WHERE';
     const conditions = [];
-    let query = 'SELECT id,title,performer FROM songs WHERE';
 
     if (title) {
       conditions.push(`title ILIKE '%${title}%'`);
@@ -37,14 +36,11 @@ class SongsServices {
     }
 
     if (conditions.length > 0) {
-      query += ' ' + conditions.join(' OR ');
+      query += ` ` + conditions.join(' OR ');
     } else {
-      // If both parameters are empty, return all songs
-      query = 'SELECT id,title,performer FROM songs';
+      query = 'SELECT id, title, performer FROM songs';
     }
-    console.log(query);
     const result = await this._pool.query(query);
-    console.log(result.rows);
     return result.rows;
   }
 
