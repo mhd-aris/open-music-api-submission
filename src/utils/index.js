@@ -7,10 +7,10 @@ const mapAlbumWithSongs = (albumSongs) => {
       albumSongs[0].id === null
         ? []
         : albumSongs.map((song) => ({
-            id: song.id,
-            title: song.title,
-            performer: song.performer,
-          })),
+          id: song.id,
+          title: song.title,
+          performer: song.performer,
+        })),
   };
   return result;
 };

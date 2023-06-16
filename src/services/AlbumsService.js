@@ -42,10 +42,9 @@ class AlbumsServices {
   }
 
   async editAlbumById(id, { name, year }) {
-    const updatedAt = new Date().toISOString();
     const query = {
-      text: 'UPDATE albums SET name = $1, year = $2, updated_at = $3 WHERE id = $4 RETURNING id',
-      values: [name, year, updatedAt, id],
+      text: 'UPDATE albums SET name = $1, year = $2 WHERE id = $3 RETURNING id',
+      values: [name, year, id],
     };
 
     const result = await this._pool.query(query);

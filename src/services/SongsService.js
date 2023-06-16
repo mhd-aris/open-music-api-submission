@@ -8,7 +8,9 @@ class SongsServices {
     this._pool = new Pool();
   }
 
-  async addSong({ title, year, performer, genre, duration, albumId }) {
+  async addSong({
+    title, year, performer, genre, duration, albumId,
+  }) {
     const id = `song-${nanoid(16)}`;
     const query = {
       text: 'INSERT INTO songs VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING id',
@@ -24,22 +26,17 @@ class SongsServices {
   }
 
   async getSongs(title, performer) {
-    let query = 'SELECT id, title, performer FROM songs WHERE';
-    const conditions = [];
-
-    if (title) {
-      conditions.push(`title ILIKE '%${title}%'`);
-    }
-
-    if (performer) {
-      conditions.push(`performer ILIKE '%${performer}%'`);
-    }
-
-    if (conditions.length > 0) {
-      query += ` ` + conditions.join(' OR ');
+    let query = 'SELECT id, title, performer FROM songs';
+    if (title && performer) {
+      query += ` WHERE performer ILIKE '%${
+        performer || ''
+      }%' AND title ILIKE '%${title || ''}%'`;
+    } else if (title || performer) {
+      query += ` WHERE performer ILIKE '%${performer}%' OR title ILIKE '%${title}%'`;
     } else {
-      query = 'SELECT id, title, performer FROM songs';
+      query += '';
     }
+
     const result = await this._pool.query(query);
     return result.rows;
   }
@@ -58,11 +55,12 @@ class SongsServices {
     return result.rows[0];
   }
 
-  async editSongById(id, { title, year, performer, genre, duration, albumId }) {
-    const updatedAt = new Date().toISOString();
+  async editSongById(id, {
+    title, year, performer, genre, duration, albumId,
+  }) {
     const query = {
-      text: 'UPDATE songs SET title = $1, year = $2, performer = $3, genre = $4, duration = $5, album_id = $6, updated_at = $7 WHERE id = $8 RETURNING id',
-      values: [title, year, performer, genre, duration, albumId, updatedAt, id],
+      text: 'UPDATE songs SET title = $1, year = $2, performer = $3, genre = $4, duration = $5, album_id = $6 WHERE id = $7 RETURNING id',
+      values: [title, year, performer, genre, duration, albumId, id],
     };
 
     const result = await this._pool.query(query);

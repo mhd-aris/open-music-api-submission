@@ -9,6 +9,5 @@
         "parser": "json"
       }
     }
-  ],
-  "jsxBracketSameLine": true
+  ]
 }
